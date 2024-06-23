@@ -1,0 +1,306 @@
+{% extends 'base/base-main.html' %}
+{% block contentmain %}
+
+<div class="">
+	<div class="row m-3">
+	</div>
+</div>
+<div class="row m-5">
+	{% if request.user.is_authenticated %}
+	{% if request.user.level_id == 2 %}
+	<h1>Upload file yang akan di enkripsi.</h1>
+	{% elif request.user.level_id == 3 %}
+	<h1>Upload file yang akan di dekripsi.</h1>
+	{% else %}
+	<h1>Upload file.</h1>
+	{% endif %}
+	<!-- {{request.user.level_id}}
+	{{request.user.nip}} -->
+	{% endif %}
+</div>
+
+<div class="container">
+	<div id="response"></div>
+	<form method="post" id="inputBerkas" enctype="multipart/form-data">
+		{% csrf_token %}
+		<label for="file">Pilih file</label>
+		<input type="file" name="file" id="file" required accept=".pdf, .enc">
+		<div class="mb-3">
+		{% if user.is_authenticated %}
+			<button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#staticBackdropEnkripsi" id="fileSubmitEnkripsi23" disabled
+			{% if request.user.is_authenticated %}{% if request.user.level_id == 3 %} style="display:none;" {% endif %}{% endif %}>Enkripsi
+			</button>
+
+			<button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#staticBackdropDekripsi" id="fileSubmitDekripsi23" disabled
+			{% if request.user.is_authenticated %}{% if request.user.level_id == 2 %} style="display:none;" {% endif %}{% endif %}>Dekripsi</button>
+		{% endif %}
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+aria-labelledby="staticBackdropLabel" aria-hidden="true">
+<div class="modal-dialog">
+	<div class="modal-content">
+		<div class="modal-header">
+			<h1 class="modal-title fs-5" id="staticBackdropLabel">Input Kunci Keamanan</h1>
+			<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+		</div>
+		<div class="modal-body">
+			<div id="resultContainer1"><!-- Tempat untuk menampilkan hasil AJAX --></div>
+			<div class="mb-3 px-5">
+				<label for="inputP1" class="form-label">Input P</label>
+				<input type="text" class="form-control" placeholder="Masukkan bilangan prima" id="inputP1">
+			</div>
+			<div class="mb-3 px-5">
+				<label for="inputQ1" class="form-label">Input Q</label>
+				<input type="text" class="form-control" placeholder="Masukkan bilangan prima" id="inputQ1">
+			</div>
+			<div class="mb-5 px-5">
+				<button type="button" class="btn btn-primary" id="keySubmit1">Generate Key</button>
+			</div>
+			<div class="mb-3 px-5">
+				<label for="publicKey1" class="form-label">Kunci Publik</label>
+				<input type="text" class="form-control" id="publicKey1" readonly>
+			</div>
+			<div class=" px-5">
+				<label for="privateKey1" class="form-label">Kunci Privat</label>
+			</div>
+			<div class="input-group mb-3 px-5">
+				<input type="text" class="form-control" id="privateKey1" readonly>
+				<button class="btn btn-outline-secondary" type="submit" id="copyPrivateKey1" onclick="copy1(event)"><i id="copyIcon1" class="bi bi-copy"></i></button>
+			</div>
+		</div>
+		<div class="modal-footer">
+			<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+			<input type="submit" class="btn btn-primary" id="encrypt1" value="Encrypt File" disabled>
+		</div>
+	</div>
+</div>
+</div>
+
+<div class="modal fade" id="staticBackdropEnkripsi" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+aria-labelledby="staticBackdropLabel" aria-hidden="true">
+<div class="modal-dialog">
+	<div class="modal-content">
+		<div class="modal-header">
+			<h1 class="modal-title fs-5" id="staticBackdropLabel">Input Kunci Keamanan</h1>
+			<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+		</div>
+		<div class="modal-body">
+				<div id="resultContainer"><!-- Tempat untuk menampilkan hasil AJAX --></div>
+				<div class="mb-3 px-5">
+					<label for="inputP" class="form-label">Input P</label>
+					<input type="text" class="form-control" placeholder="Masukkan bilangan prima" id="inputP">
+				</div>
+				<div class="mb-3 px-5">
+					<label for="inputQ" class="form-label">Input Q</label>
+					<input type="text" class="form-control" placeholder="Masukkan bilangan prima" id="inputQ">
+				</div>
+				<div class="mb-5 px-5">
+					<button type="button" class="btn btn-primary" id="keySubmit">Generate Key</button>
+				</div>
+				<div class="mb-3 px-5">
+					<label for="publicKey" class="form-label">Kunci Publik</label>
+					<input type="text" class="form-control" id="publicKey" name="publicKeyEnc" readonly>
+				</div>
+				<div class=" px-5">
+					<label for="privateKey" class="form-label">Kunci Privat</label>
+				</div>
+				<div class="input-group mb-3 px-5">
+					<input type="text" class="form-control" id="privateKey" name="privateKeyEnc" readonly>
+					<button class="btn btn-outline-secondary" type="submit" id="copyPrivateKey" onclick="copy(event)"><i id="copyIcon" class="bi bi-copy"></i></button>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+				<input type="submit" class="btn btn-primary" id="encrypt" value="Encrypt File" disabled>
+			</div>
+	</div>
+</div>
+</div>
+
+<div class="modal fade" id="staticBackdropDekripsi" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+aria-labelledby="staticBackdropLabel" aria-hidden="true">
+<div class="modal-dialog">
+	<div class="modal-content">
+		<div class="modal-header">
+			<h1 class="modal-title fs-5" id="staticBackdropLabel">Input Kunci Keamanan</h1>
+			<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+		</div>
+		<div class="modal-body">
+			<div id="resultContainerDec"></div>
+			<div class="mb-3 px-5">
+				<label for="privateKeyDec" class="form-label">Kunci Privat</label>
+				<input type="text" class="form-control" id="privateKeyDec" name="privateKeyDec">
+			</div>
+		</div>
+		<div class="modal-footer">
+			<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+			<input type="submit" class="btn btn-primary" id="decrypt" value="Decrypt File" disabled>
+		</div>
+	</div>
+</div>
+</div>
+</form>
+</div>
+{% if complete %}
+<div class="container mt-3">
+	<a href="{% url 'download-file' status slug %}" class="btn btn-warning">Download File</a>
+</div>
+{% endif %}
+{% endblock contentmain %}
+
+{% block javascript %}
+<script>
+	$('#file').change(function() {
+		var fileExt = $(this).val().split('.').pop();
+
+		$.ajax({
+			type: 'POST',
+			url: '{% url "validate-file" %}',
+			data: {
+				csrfmiddlewaretoken: '{{ csrf_token }}',
+				fileExt: fileExt
+			},
+			success: function(data) {
+				// console.log(data);
+				if (data.status == 'danger') {
+					$('#response').html('<div class="alert alert-' + data.status + ' alert-dismissible" role="alert" >' + data.message + '<button type="button" class="btn-close btn-close-danger" data-bs-dismiss="alert" aria-label="Close"></button></div>');
+					$('#fileSubmitEnkripsi13').prop('disabled', true);
+					$('#fileSubmitDekripsi13').prop('disabled', true);
+					$('#fileSubmitEnkripsi23').prop('disabled', true);
+					$('#fileSubmitDekripsi23').prop('disabled', true);
+				} else if (data.status == 'success') {
+					$('#response').html('');
+					// condition if userlevel 2/3
+					if (data.ext == 'pdf') {
+						$('#fileSubmitEnkripsi13').prop('disabled', false);
+						$('#fileSubmitEnkripsi23').prop('disabled', false);
+						$('#fileSubmitDekripsi13').prop('disabled', true);
+						$('#fileSubmitDekripsi23').prop('disabled', true);
+					} else if (data.ext == 'enc') {
+						$('#fileSubmitEnkripsi13').prop('disabled', true);
+						$('#fileSubmitEnkripsi23').prop('disabled', true);
+						$('#fileSubmitDekripsi13').prop('disabled', false);
+						$('#fileSubmitDekripsi23').prop('disabled', false);
+					}
+				}
+			}
+		});
+	});
+
+	$('#privateKeyDec').on('input', function() {
+		var private = $(this).val();
+		// console.log(private);
+		$.ajax({
+			type: 'POST',
+			url: '{% url "validate-private" %}',
+			data: {
+				csrfmiddlewaretoken: '{{ csrf_token }}',
+				private: private
+			},
+			success: function(data) {
+				// console.log(data);
+				if (data.status == 'success') {
+					$('#resultContainerDec').html('');
+					$('#decrypt').prop('disabled', false);
+				} else {
+					$('#resultContainerDec').html('<div class="alert alert-' + data.status + ' alert-dismissible" role="alert" >' + data.message + '<button type="button" class="btn-close btn-close-danger" data-bs-dismiss="alert" aria-label="Close"></button></div>');
+					$('#decrypt').prop('disabled', true);
+				}
+			}
+		});
+	});
+
+	$('#keySubmit').on('click', function () {
+		var inputP = $('#inputP').val();
+		var inputQ = $('#inputQ').val();
+
+		if (inputP.trim() === '' || inputQ.trim() === '') {
+			$('#resultContainer').html('<div class="alert alert-danger alert-dismissible" role="alert" >Masukkan nilai P dan Q<button type="button" class="btn-close btn-close-danger" data-bs-dismiss="alert" aria-label="Close"></button></div>');
+		} else {
+			var publicKey = document.getElementById('publicKey');
+			var privateKey = document.getElementById('privateKey');
+			$.ajax({
+				type: 'POST',
+				url: '{% url "validate-key" %}',
+				data: {
+					csrfmiddlewaretoken: '{{ csrf_token }}',
+					inputP: inputP,
+					inputQ: inputQ
+				},
+				success: function (data) {
+					$('#resultContainer').html('<div class="alert alert-' + data.status + ' alert-dismissible" role="alert" >' + data.message + '<button type="button" class="btn-close btn-close-danger" data-bs-dismiss="alert" aria-label="Close"></button></div>');
+					if (data.status == 'success') {
+						publicKey.value = data.public;
+						privateKey.value = data.private;
+						$('#encrypt').prop('disabled', false);
+					}
+				},
+				error: function (xhr, status, error) {
+					console.error(error);
+				}
+			});
+		}
+	})
+
+	$('#keySubmit1').on('click', function () {
+		var inputP = $('#inputP1').val();
+		var inputQ = $('#inputQ1').val();
+
+		if (inputP.trim() === '' || inputQ.trim() === '') {
+			$('#resultContainer1').html('<div class="alert alert-danger alert-dismissible" role="alert" >Masukkan nilai P dan Q<button type="button" class="btn-close btn-close-danger" data-bs-dismiss="alert" aria-label="Close"></button></div>');
+		} else {
+			var publicKey = document.getElementById('publicKey1');
+			var privateKey = document.getElementById('privateKey1');
+			$.ajax({
+				type: 'POST',
+				url: '{% url "validate-key" %}',
+				data: {
+					csrfmiddlewaretoken: '{{ csrf_token }}',
+					inputP: inputP,
+					inputQ: inputQ
+				},
+				success: function (data) {
+					$('#resultContainer1').html('<div class="alert alert-' + data.status + ' alert-dismissible" role="alert" >' + data.message + '<button type="button" class="btn-close btn-close-danger" data-bs-dismiss="alert" aria-label="Close"></button></div>');
+					if (data.status == 'success') {
+						publicKey.value = data.public;
+						privateKey.value = data.private;
+						$('#encrypt1').prop('disabled', false);
+					}
+				},
+				error: function (xhr, status, error) {
+					console.error(error);
+				}
+			});
+		}
+	})
+
+	function copy(event) {
+		event.preventDefault();
+		var text = document.getElementById('privateKey');
+		// var coic = document.getElementById('copyIcon');
+
+		// coic.classList.remove('bi', 'bi-copy');
+		// coic.classList.add('bi', 'bi-check2');
+		if (text) {
+			text.select();
+			document.execCommand('copy')
+		} 
+	}
+
+	function copy1(event) {
+		event.preventDefault();
+		var text = document.getElementById('privateKey1');
+		// var coic = document.getElementById('copyIcon');
+
+		// coic.classList.remove('bi', 'bi-copy');
+		// coic.classList.add('bi', 'bi-check2');
+		if (text) {
+			text.select();
+			document.execCommand('copy')
+		} 
+	}
+</script>
+{% endblock javascript %}

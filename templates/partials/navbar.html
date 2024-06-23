@@ -1,0 +1,34 @@
+{% load static %}
+<nav class="navbar navbar-expand-lg bg-warning">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/"><img src="{% static 'img/logo.png' %}" width="35"></a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll" aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+            <div class="navbar-nav">
+                <a class="nav-link active" aria-current="page" href="/">Home</a>
+                {% if request.user.is_authenticated %}
+                    {% if request.user.level_id == 2 %}
+                    <a class="nav-link" href="/daftar-file">File Enkripsi</a>
+                    <a class="nav-link" href="/daftar-polisi">Polisi</a>
+                    {% elif request.user.level_id == 3 %}
+                    <a class="nav-link" href="/daftar-file">File Dekripsi</a>
+                    {% elif request.user.level_id == 1 %}
+                    <a class="nav-link" href="/daftar-file">File</a>
+                    <a class="nav-link" href="/daftar-polisi">Polisi</a>
+                    {% endif %}
+                {% endif %}
+                <a class="nav-link" href="/tentang">Tentang</a>
+            </div>
+            <ul class="navbar-nav ms-auto">
+                <ul class="nav-item">
+                    <a href="/profil" class="nav-link"><i></i> Profil</a>
+                </ul>
+                <ul class="nav-item">
+                    <a href="{% url 'logout' %}" class="nav-link"><i class="bi bi-box-arrow-in-right"></i> Keluar</a>
+                </ul>
+            </ul>
+        </div>
+    </div>
+</nav>

@@ -1,0 +1,67 @@
+{% extends 'base/base-profile.html' %}
+{% load static %}
+{% block contentprofile %}
+
+<div class="vh-500 d-flex justify-content-center align-items-center flex-column">
+    <div class="padding">
+        <div class="row">
+            <div class="col-xl-15 col-md-12">
+                <div class="card user-card-full">
+                    <div class="row m-l-0 m-r-0">
+                        <div class="col-sm-12">
+                            <div>
+                                <div class="card-block">
+                                    <h6 class="m-b-20 p-b-5 b-b-default f-w-600">Tentang Aplikasi</h6>
+                                    <div>
+                                        <div>
+                                            Aplikasi pengamanan data surat perintah penugasan dibuat dengan memiliki tujuan sebagai salah satu cara 
+                                            mencegah terjadinya kebocoran data surat perintah pengusan oleh pihak-pihak lain, dengan memanfaatkan
+                                            algoritma rsa yang bertujuan mengenkripsi data surat perintah penugsaan diharapkan tidak 
+                                            terjadi kebocoran pada informasi yang bersifat rahasia
+                                            </div>
+                                        <div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-block">
+                                <h6 class="m-b-20 p-b-5 b-b-default f-w-600">Algoritma RSA</h6>
+                                <div>
+                                    <div>
+                                        RSA (Rivest-Shamir-Adleman) adalah salah satu algoritma kriptografi kunci publik yang paling banyak digunakan
+                                        di dunia. RSA dapat digunakan untuk enkripsi dan tanda tangan digital. Algoritma ini pertama kali diperkenalkan 
+                                        oleh Ron Rivest, Adi Shamir, dan Leonard Adleman pada tahun 1978.
+                                        Algoritma ini menerapkan kunci asimetris atau kunci yang berbeda antara proses enkripsi dan dekripsi. 
+                                        Ada beberapa proses yang digunakan, berikut proses algoritma RSA : </div>
+                                    <div>
+                                        1. Generasi Kunci / Pembutan Kunci</div>
+                                    <div>
+                                        Tahap ini pembuatan kunci dilakukan dengan perhitungan untuk menentukan kunci publik dan kunci privat 
+                                        yang akan digunakan.</div>
+                                    <div>
+                                        2. Tahap Enkripsi</div>
+                                    <div>
+                                        Pada proses ini data atau file diubah dalam bentuk kode yang sudah dihitung dalam algoritma.</div>
+                                    <div>
+                                        3. Tahap Dekripsi</div>
+                                    <div>
+                                        Tahap dekripsi ialah dilakukannya proses mengubah kode kedalam bentuk asli atau bentuk sebelum dilakukan 
+                                        proses enrkipsi.</div>
+                                    <div>
+                                        Berikut merupakan alur dari proses enkripsi dan dekripsi file</div>
+                                    <div> 
+                                        <img src="{% static 'img/enkripsi1.jpg' %}">
+                                        <img src="{% static 'img/dekripsi1.jpg' %}"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer text-body-secondary bg-warning fixed-bottom">
+            <p class="text-center mt-4 mb-4">&copy; Polres Kota Magelang</p>
+        </div>
+    </div>
+</div>
+
+{% endblock contentprofile %}

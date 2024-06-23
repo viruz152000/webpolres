@@ -1,0 +1,73 @@
+{% extends 'base/base-table.html' %}
+{% block contenttable %}
+
+<section class="ftco-section">
+	<div class="container">
+		<div class="row justify-content-center">
+			<div class="col-md-6 text-center mb-5">
+				<h2 class="heading-section">Daftar File</h2>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12">
+				{% for message in messages %}
+				<div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} alert-dismissible" role="alert" >{{ message }}<button type="button" class="btn-close btn-close-danger" data-bs-dismiss="alert" aria-label="Close"></button></div>
+				{% endfor %}
+			</div>
+			<div class="col-md-12">
+				<div class="table-wrap">
+					<table class="table table-bordered table-dark table-hover">
+						<thead>
+							<tr class="text-center">
+								<th>No</th>
+								<th>File</th>
+								{% if request.user.is_authenticated %}
+									{% if request.user.level_id == 3 %}
+									<th>File Dekripsi</th>
+									{% elif request.user.level_id == 2 %}
+									<th>File Enkripsi</th>
+									{% elif request.user.level_id == 1 %}
+									<th>File Masuk</th>
+									{% endif %}
+								{% endif %}
+								<th>Jenis</th>
+								<th>Size</th>
+								<th>Tanggal</th>
+								<th>Unduh</th>
+							</tr>
+						</thead>
+						<tbody>
+							<!-- @php
+							$counter = 1;
+							@endphp
+							@foreach ($fileList as $data) -->
+							{% if request.user.is_authenticated %}
+							{% for file in files %}
+							<tr>
+								<th scope="row" style="text-align: center;">{{ forloop.counter }}</th>
+								<td>{{ file.filename }}</td>
+								<td>{{ file.resultname }}</td>
+								<td>{{ file.jenis }}</td>
+								<td>{{ file.size }}</td>
+								<td>{{ file.created }}</td>  
+								<td style="text-align: center;">
+									<a href="{% url 'download-file' file.status file.slug %}" class="btn btn-success">Unduh</a>
+									<a href="{% url 'delete-file' file.status file.slug %}" class="btn btn-danger">Hapus</a>
+								</td>    
+							</tr>
+							{% endfor %}
+							{% endif %}
+							<!-- @php
+							 counter ++;
+							@endphp
+							@endif
+							@endforeach -->
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+{% endblock contenttable %}

@@ -1,0 +1,89 @@
+{% extends 'base/base-add-user.html' %}
+{% block contentacreateuser %}
+
+<div class="formbold-form-wrapper">
+  <!-- <img src="img/logo.jpg" width="50px"> -->
+  <!-- <h3>Tambah Users.</h3> -->
+  {% for message in messages %}
+      <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} alert-dismissible" role="alert" >{{ message }}<button type="button" class="btn-close btn-close-danger" data-bs-dismiss="alert" aria-label="Close"></button></div>
+    {% endfor %}
+  <form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="formbold-mb-3">
+      <div>
+        <label for="level_users" class="formbold-form-label">Level Users</label>
+
+        <select class="formbold-form-input border-black" name="level_users" id="level_users">
+          <option value="3">User</option>
+          <option value="2">Pimpinan</option>
+          <option value="1">Administrator</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="formbold-mb-3">
+      <div>
+        <label for="nip" class="formbold-form-label"> Nomor Induk Polisi </label>
+        <input type="number" name="nip" id="nip" placeholder="Masukan NIP"
+          class="formbold-form-input border border-black" required />
+      </div>
+    </div>
+
+    <div class="formbold-mb-3">
+      <div>
+        <label for="name" class="formbold-form-label"> Nama Lengkap Polisi </label>
+        <input type="text" name="name" id="name" placeholder="Masukan nama lengkap Polisi"
+          class="formbold-form-input border border-black" required />
+      </div>
+    </div>
+
+    <div class="formbold-mb-3">
+      <div>
+        <label for="jabatan" class="formbold-form-label"> Jabatan Polisi </label>
+        <input type="text" name="jabatan" id="jabatan" placeholder="Masukan jabatan Polisi"
+          class="formbold-form-input border border-black" required />
+      </div>
+    </div>
+
+    <div class="formbold-input-flex">
+      <div>
+        <label for="pangkat" class="formbold-form-label"> Pangkat Polisi </label>
+        <input type="text" name="pangkat" id="pangkat" placeholder="Masukan pangkat Polisi"
+          class="formbold-form-input border border-black" required />
+      </div>
+
+      <div>
+        <label for="name" class="formbold-form-label">Tempat Tugas</label>
+
+        <select class="formbold-form-input border-black" name="tempat_tugas" id="tempat_tugas">
+          <option value="1">Polres Magelang</option>
+          <option value="2">Polsek Magelang Tengah</option>
+          <option value="3">Polsek Magelang Utara</option>
+          <option value="4">Polsek Magelang Selatan</option>
+          <option value="5">Polsek Magelang Mortoyudan</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="formbold-mb-3">
+      <label for="alamat" class="formbold-form-label">
+        Alamat
+      </label>
+      <textarea rows="6" name="alamat" id="alamat" class="formbold-form-input border-black"></textarea>
+    </div>
+
+    <div class="formbold-form-file-flex">
+      <label for="photo" class="formbold-form-label ">
+        Foto Profil
+      </label>
+    </div>
+
+    <div class="formbold-form-file-flex">
+      <input type="file" name="photo" id="photo" class="formbold-form-file " required />
+    </div>
+
+    <button type="submit" class="formbold-btn">Submit</button>
+  </form>
+</div>
+
+{% endblock contentacreateuser %}

@@ -1,0 +1,66 @@
+{% extends 'base/base-main.html' %}
+{% block contentmain %}
+{% if request.user.is_authenticated %}
+{% if request.user.level_id == 1 %}
+<div class="m-5">
+    <a href="/tambah-polisi" class="btn btn-primary">Tambah Users</a>
+</div>
+{% endif %}
+{% endif %}
+<div class="row px-5">
+    <div class="col-md-12">
+        {% for message in messages %}
+        <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} alert-dismissible" role="alert" >{{ message }}<button type="button" class="btn-close btn-close-danger" data-bs-dismiss="alert" aria-label="Close"></button></div>
+        {% endfor %}
+    </div>
+</div>
+<table>
+    <thead>
+        <tr>
+            <th>No</th>
+            <th>Foto</th>
+            <th>NIP</th>
+            <th>Nama</th>
+            <th>Pangkat</th>
+            <th>Tempat Tugas</th>
+            <th>Alamat</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+    	{% if request.user.is_authenticated %}
+      {% if request.user.level_id == 1 or request.user.level_id == 2 %}
+      {% for user in users %}
+      <tr>
+        <td style="text-align: center;">{{ forloop.counter }}</td>
+        <td style="text-align: center;">
+            <img src="{% if user.foto %}{{ user.foto.url }}{% endif %}" alt="" width="100px">
+        </td>
+        <td>{{ user.nip }}</td>
+        <td>{{ user.fullname }}</td>
+        <td>{{ user.pangkat }}</td>
+        <td>{{ user.post }}</td>
+        <td>{{ user.alamat }}</td>
+        <td style="text-align: center;">
+            <a href="{% url 'edit-polisi' user.username %}" class="btn btn-primary">Edit</a>
+            <a href="{% url 'delete-polisi' user.nip %}" class="btn btn-danger">Hapus</a>
+        </tr>
+        {% endfor %}
+        {% endif %}
+        {% endif %}
+        <!-- @php
+        $counter = 1;
+        @endphp
+        @foreach ($penggunaList as $data)
+        @if($data->level_users != 1) -->
+        
+<!--         @endif
+    @endforeach -->
+</tbody>
+</table>
+
+<div class="card-footer text-body-secondary bg-warning fixed-bottom">
+    <p class="text-center mt-1 mb-1">&copy; Polres Kota Magelang</p>
+</div>
+
+{% endblock contentmain %}
